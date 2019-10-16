@@ -65,7 +65,7 @@ app.get('/rumi/departamento/petfriendly/:petfriendly',(req,res)=>{
 });
 
 //Obtener por rango de ciudades
-app.get('/rumi/departamento/precio/:precio')
+//app.get('/rumi/departamento/precio/:precio')
 
 //Leer todas las colleciones
 app.get('/rumi/departamento',(req,res)=>{
