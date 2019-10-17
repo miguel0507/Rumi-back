@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000; 
+const cors=require('cors');
 require('./database');
 
 const Departamento=require('./models/departamento');
@@ -12,9 +13,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.send("It's alive!");
-});
+//Permitir cors 
+app.use(cors());
 
 //Crear departamento
 app.post('/rumi/departamento',(req,res)=>{
@@ -65,13 +65,28 @@ app.get('/rumi/departamento/petfriendly/:petfriendly',(req,res)=>{
 });
 
 //Obtener por rango de ciudades
-//app.get('/rumi/departamento/precio/:precio')
+app.get('/rumi/departamento/precio/:precio')
 
 //Leer todas las colleciones
 app.get('/rumi/departamento',(req,res)=>{
-    Departamento.find()
-         .then(departamento => res.send(departamento))
-         .catch(err=> res.send(err));
+    //?precio=5000-20000
+    if(req.query.precio){
+        
+        const query = req.query.precio;
+        const [precio1, precio2] = query.split('-');
+        
+        /*
+        https://docs.mongodb.com/manual/reference/method/db.collection.find/
+        { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') } }
+        */
+       Departamento.find({ precio: { $gt: precio1, $lt: precio2 } })
+       .then(departamento => res.send(departamento))
+       .catch(err=> res.send(err));      
+    } else {
+        Departamento.find()
+        .then(departamento => res.send(departamento))
+        .catch(err=> res.send(err));
+    }
 })
 
 //Actualizar
