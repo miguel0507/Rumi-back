@@ -16,6 +16,11 @@ app.use(bodyParser.json());
 //Permitir cors 
 app.use(cors());
 
+//Raiz
+app.get('/',(req,res)=>{
+    alert("Ha ingresado correctamente");
+})
+
 //Crear departamento
 app.post('/rumi/departamento',(req,res)=>{
     const newDepartamento= new Departamento(req.body);
